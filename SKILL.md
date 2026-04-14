@@ -178,14 +178,18 @@ python jira_update.py [--board <name>] <subcommand> ...
 python jira_search.py "<JQL>" \
   [--limit N] \
   [--fields f1,f2,...] \
+  [--all-projects] \
   [--board <name>]
 ```
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `JQL` | (required) | E.g. `project=PROJ AND status='In Progress'` |
+| `JQL` | (required) | E.g. `status='In Progress'` or `assignee=currentUser()` |
 | `--limit` | 50 | Max results |
 | `--fields` | `summary,status,issuetype` | Comma-separated: `key`, `summary`, `status`, `issuetype`, `assignee`, or any field |
+| `--all-projects` | false | Search across the whole Jira instance instead of just the active profile's project |
+
+**Scoping behavior:** by default the query is auto-scoped to the **active profile's project** — the JQL gets wrapped as `project="<key>" AND (<user_jql>)`. This avoids leaking tasks from other projects under the same instance. Use `--all-projects` to disable. If the JQL already contains `project=` / `project IN (...)`, auto-scoping is skipped.
 
 **Output:** Table `KEY | <fields>` + `Found: N`.
 

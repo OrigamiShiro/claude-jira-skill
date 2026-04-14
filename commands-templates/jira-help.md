@@ -26,7 +26,7 @@ Jira CLI Skill — help
   jira_create.py    <summary> [-d TEXT] [-t Task|Bug|Story|Epic] [-a account_id] [--no-assignee]
   jira_update.py    transition <key> <status> | assign <key> <id> | unassign <key> | field <key> <field> <value>
   jira_delete.py    <key1> [<key2> ...] [--delete-subtasks]  — delete issue(s)
-  jira_search.py    '<JQL>' [--limit N] [--fields f1,f2]
+  jira_search.py    '<JQL>' [--limit N] [--fields f1,f2] [--all-projects]  — auto-scoped to active project
   jira_link.py      add <in> <out> --type TYPE | remove <link_id> | list <key> | types
   jira_worklog.py   add <key> <time> [--comment TEXT] [--started ISO] | list <key> | remove <key> <id>
   jira_sprint.py    list [--state] | show <id> | create --name NAME | move <id> <key1>... | start <id> | complete <id>
