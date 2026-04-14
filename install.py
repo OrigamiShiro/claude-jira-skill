@@ -1,16 +1,22 @@
 """
-Установщик Jira CLI Skill.
+Jira CLI Skill installer.
 
-Запуск:
+Usage:
   python ~/.claude/skills/jira/install.py
 
-Что делает:
-  1. Проверяет наличие Python 3.9+
-  2. Устанавливает зависимости (requests)
-  3. Копирует slash-команды в ~/.claude/commands/
-  4. Подсказывает следующий шаг (/jira-init)
+What it does:
+  1. Verifies the skill is in ~/.claude/skills/jira/ (Claude Code default path)
+  2. Checks Python 3.9+
+  3. Installs pip dependencies (requests)
+  4. Copies slash commands to ~/.claude/commands/
+  5. Prints next steps (/jira-init)
 
-Кроссплатформенный — работает на Windows, macOS, Linux.
+IMPORTANT: this installer does NOT copy the skill anywhere.
+The skill must already be at ~/.claude/skills/jira/ for Claude Code to detect it.
+If you cloned the repo elsewhere, either move it or create a symlink/junction
+to ~/.claude/skills/jira/.
+
+Cross-platform — works on Windows, macOS, Linux.
 """
 
 from __future__ import annotations
@@ -31,11 +37,47 @@ SKILL_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = SKILL_DIR / "commands-templates"
 USER_COMMANDS = Path.home() / ".claude" / "commands"
 REQUIREMENTS = SKILL_DIR / "requirements.txt"
+EXPECTED_SKILL_PATH = (Path.home() / ".claude" / "skills" / "jira").resolve()
+
+
+def check_location() -> bool:
+    """Warn if skill is not at the expected path ~/.claude/skills/jira/."""
+    if SKILL_DIR == EXPECTED_SKILL_PATH:
+        print(f"✓ Location: {SKILL_DIR}")
+        return True
+
+    print(f"⚠ Skill is NOT at the expected location!")
+    print(f"  Current:  {SKILL_DIR}")
+    print(f"  Expected: {EXPECTED_SKILL_PATH}")
+    print()
+    print("  Claude Code auto-detects skills from ~/.claude/skills/<name>/.")
+    print("  If you leave the skill where it is, Claude won't see it.")
+    print()
+    print("  Options:")
+    print(f"    1. Move:     mv \"{SKILL_DIR}\" \"{EXPECTED_SKILL_PATH}\"")
+    print(f"    2. Clone again into the correct path:")
+    print(f"       git clone <repo> \"{EXPECTED_SKILL_PATH}\"")
+    print(f"    3. Symlink (macOS/Linux):")
+    print(f"       ln -s \"{SKILL_DIR}\" \"{EXPECTED_SKILL_PATH}\"")
+    print(f"    4. Junction (Windows, cmd as admin):")
+    print(f"       mklink /J \"{EXPECTED_SKILL_PATH}\" \"{SKILL_DIR}\"")
+    print()
+
+    try:
+        answer = input("Continue installation anyway? [y/N] ").strip().lower()
+    except EOFError:
+        answer = "n"
+    if answer != "y":
+        print("Aborted.")
+        return False
+
+    print("⚠ Continuing — but Claude Code may not see this skill.")
+    return True
 
 
 def check_python() -> bool:
     if sys.version_info < (3, 9):
-        print(f"❌ Требуется Python 3.9+, у тебя {sys.version.split()[0]}")
+        print(f"❌ Python 3.9+ required, you have {sys.version.split()[0]}")
         return False
     print(f"✓ Python {sys.version.split()[0]}")
     return True
@@ -43,7 +85,7 @@ def check_python() -> bool:
 
 def install_requirements() -> bool:
     if not REQUIREMENTS.is_file():
-        print("⚠ requirements.txt не найден, пропускаю")
+        print("⚠ requirements.txt not found, skipping")
         return True
 
     print(f"→ pip install -r {REQUIREMENTS}")
@@ -54,13 +96,13 @@ def install_requirements() -> bool:
     if result.returncode != 0:
         print(f"❌ pip install failed:\n{result.stderr}")
         return False
-    print("✓ Зависимости установлены")
+    print("✓ Dependencies installed")
     return True
 
 
 def install_commands() -> bool:
     if not TEMPLATES_DIR.is_dir():
-        print(f"❌ Не найдена директория шаблонов: {TEMPLATES_DIR}")
+        print(f"❌ Templates directory not found: {TEMPLATES_DIR}")
         return False
 
     USER_COMMANDS.mkdir(parents=True, exist_ok=True)
@@ -76,14 +118,14 @@ def install_commands() -> bool:
         installed.append(dst.name)
 
     if installed:
-        print(f"✓ Установлено slash-команд: {len(installed)}")
+        print(f"✓ Installed slash commands: {len(installed)}")
         for n in installed:
             print(f"    /{n.removesuffix('.md')}")
     if skipped:
-        print(f"⚠ Пропущено (уже есть): {len(skipped)}")
+        print(f"⚠ Skipped (already exist): {len(skipped)}")
         for n in skipped:
             print(f"    /{n.removesuffix('.md')}")
-        print("   Для переустановки удали файлы вручную и перезапусти install.py")
+        print("   To reinstall — delete those files and re-run install.py")
 
     return True
 
@@ -91,24 +133,25 @@ def install_commands() -> bool:
 def print_next_steps() -> None:
     print()
     print("═" * 55)
-    print("✓ Установка завершена")
+    print("✓ Installation complete")
     print("═" * 55)
     print()
-    print("Следующие шаги:")
-    print("  1. Перезапусти Claude Code (или обнови список команд).")
-    print("  2. Получи Atlassian API token:")
+    print("Next steps:")
+    print("  1. Restart Claude Code (or refresh command list).")
+    print("  2. Get an Atlassian API token:")
     print("     https://id.atlassian.com/manage-profile/security/api-tokens")
-    print("  3. В Claude Code запусти:  /jira-init")
+    print("  3. In Claude Code run:  /jira-init")
     print()
-    print("Список всех команд:  /jira-help")
+    print("See all commands:  /jira-help")
     print()
 
 
 def main() -> int:
-    print(f"Jira CLI Skill — установка")
-    print(f"Location: {SKILL_DIR}")
+    print("Jira CLI Skill — installation")
     print("─" * 55)
 
+    if not check_location():
+        return 1
     if not check_python():
         return 1
     if not install_requirements():
