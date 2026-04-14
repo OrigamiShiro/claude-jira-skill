@@ -20,13 +20,13 @@ Manage Jira from Claude Code via slash commands and CLI scripts.
 **macOS / Linux / WSL / Git Bash:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.sh | bash
 ```
 
 **Windows (PowerShell, Win10+):**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.ps1 | iex
 ```
 
 The bootstrap script downloads the repo into `~/.claude/skills/jira`, installs the `requests` dependency, and copies slash commands into `~/.claude/commands/`.
@@ -40,7 +40,7 @@ If you prefer control over each step:
 #### 1. Clone into the standard skills path
 
 ```bash
-git clone https://github.com/<user>/claude-jira-skill ~/.claude/skills/jira
+git clone https://github.com/OrigamiShiro/claude-jira-skill ~/.claude/skills/jira
 ```
 
 > On Windows PowerShell `~` expands to `$env:USERPROFILE`. If it doesn't work — use the full path: `git clone <repo-url> "$env:USERPROFILE\.claude\skills\jira"`.
@@ -181,13 +181,13 @@ MIT — see [LICENSE](LICENSE).
 **macOS / Linux / WSL / Git Bash:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.sh | bash
 ```
 
 **Windows (PowerShell, Win10+):**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.ps1 | iex
 ```
 
 Bootstrap-скрипт скачает репу в `~/.claude/skills/jira`, установит зависимость `requests` и скопирует slash-команды в `~/.claude/commands/`.
@@ -201,7 +201,7 @@ Bootstrap-скрипт скачает репу в `~/.claude/skills/jira`, ус�
 #### 1. Клонировать в стандартный путь скиллов
 
 ```bash
-git clone https://github.com/<user>/claude-jira-skill ~/.claude/skills/jira
+git clone https://github.com/OrigamiShiro/claude-jira-skill ~/.claude/skills/jira
 ```
 
 > На Windows PowerShell `~` раскрывается в `$env:USERPROFILE`. Если не работает — используй полный путь: `git clone <repo-url> "$env:USERPROFILE\.claude\skills\jira"`.

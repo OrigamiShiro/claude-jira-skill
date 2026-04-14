@@ -1,11 +1,11 @@
 # Jira CLI Skill — one-line installer for Windows PowerShell.
 #
 # Usage:
-#   iwr -useb https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.ps1 | iex
+#   iwr -useb https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.ps1 | iex
 
 $ErrorActionPreference = 'Stop'
 
-$RepoUrl = if ($env:REPO_URL) { $env:REPO_URL } else { 'https://github.com/<user>/claude-jira-skill' }
+$RepoUrl = if ($env:REPO_URL) { $env:REPO_URL } else { 'https://github.com/OrigamiShiro/claude-jira-skill' }
 $Branch  = if ($env:BRANCH)   { $env:BRANCH }   else { 'main' }
 $Dest    = if ($env:DEST)     { $env:DEST }     else { Join-Path $env:USERPROFILE '.claude\skills\jira' }
 

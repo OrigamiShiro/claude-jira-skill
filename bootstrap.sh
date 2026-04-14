@@ -2,14 +2,14 @@
 # Jira CLI Skill — one-line installer for macOS/Linux/WSL/Git Bash.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/<user>/claude-jira-skill/main/bootstrap.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/OrigamiShiro/claude-jira-skill/main/bootstrap.sh | bash
 #
 # Optional: override repo:
 #   curl -fsSL .../bootstrap.sh | REPO_URL=https://... bash
 
 set -euo pipefail
 
-REPO_URL="${REPO_URL:-https://github.com/<user>/claude-jira-skill}"
+REPO_URL="${REPO_URL:-https://github.com/OrigamiShiro/claude-jira-skill}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$HOME/.claude/skills/jira}"
 
