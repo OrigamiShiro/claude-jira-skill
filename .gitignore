@@ -1,0 +1,30 @@
+# Secrets — NEVER commit
+creds/*.json
+!creds/.gitkeep
+
+# Local profiles — у каждого свои
+boards/*.json
+!boards/.gitkeep
+
+# Active profile state
+config.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# Environment
+.env
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

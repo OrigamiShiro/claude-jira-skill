@@ -1,0 +1,24 @@
+[
+  {
+    "op": "transition",
+    "key": "HOR-1",
+    "status": "Готово"
+  },
+  {
+    "op": "worklog",
+    "key": "HOR-1",
+    "time": "2h 30m",
+    "comment": "Реализовал фичу X"
+  },
+  {
+    "op": "link",
+    "inward": "HOR-2",
+    "outward": "HOR-1",
+    "type": "parent-child"
+  },
+  {
+    "op": "assign",
+    "key": "HOR-3",
+    "account_id": "712020:abc-def"
+  }
+]
