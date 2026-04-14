@@ -1,37 +1,37 @@
 ---
-description: Проверить подключение к Jira (whoami) с выбором борды
+description: Check Jira connection (whoami) with board picker
 ---
 
-Проверить подключение к Jira. Пользователь выбирает какую борду пинговать.
+Check Jira connection. If multiple profiles exist — let user choose which one to ping.
 
-## Шаг 1: получить данные о профилях
+## Step 1: get profile data
 
-Запусти **в тишине** (не выводи stdout пользователю):
+Run **silently** (do not show stdout to user):
 
 ```bash
 python ~/.claude/skills/jira/scripts/jira_config.py list
 ```
 
-Распарси результат. Каждая строка вида ` *name` — это активный, ` name` — остальные. Звёздочка `*` означает активный.
+Parse the output. Each line like ` *name` is the active profile, ` name` is other. Asterisk `*` means active.
 
-## Шаг 2: построить список и спросить
+## Step 2: build list and ask
 
-**Если профилей 0** → сообщи: `❌ Профили не настроены. Запусти /jira-init.` и остановись.
+**If 0 profiles** → report: `❌ No profiles configured. Run /jira-init.` and stop.
 
-**Если 1 профиль** → пропусти вопрос, сразу пинг.
+**If 1 profile** → skip the question, ping directly.
 
-**Если 2+ профилей** — сам составь options для `AskUserQuestion`:
+**If 2+ profiles** — build `AskUserQuestion` options yourself:
 
-- **Опция 1** — активный профиль, с label `<имя> (active)` и description `Рекомендуется`.
-- **Опции 2-N** — остальные профили по порядку списка.
-- Всего в AskUserQuestion может быть 2-4 опции. Если профилей больше 4 — возьми активный + первые 3 других; остальные доступны через "Other".
+- **Option 1** — active profile, label `<name> (active)`, description `Recommended`.
+- **Options 2..N** — other profiles in list order.
+- AskUserQuestion supports 2-4 options. If more than 4 profiles — take active + first 3 others; remaining are available via "Other".
 
-Вопрос: `"Какую борду пинговать?"`
+Question: `"Which board to ping?"`
 
-## Шаг 3: пинг
+## Step 3: ping
 
 ```bash
 python ~/.claude/skills/jira/scripts/jira_ping.py --board <chosen>
 ```
 
-**Выведи stdout дословно в code-блоке.** Без комментариев.
+**Print stdout verbatim in a code block.** No extra comments.

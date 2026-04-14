@@ -1,27 +1,27 @@
 ---
-description: Первичная настройка Jira-борды (запрашивает credentials)
+description: Initial Jira board setup (prompts for credentials)
 ---
 
-Нужно собрать **7 полей** от пользователя. У AskUserQuestion лимит 4 вопроса за вызов, поэтому опрашивай в **два этапа**.
+Collect **7 fields** from the user. `AskUserQuestion` has a 4-questions-per-call limit, so ask in **two stages**.
 
-## Этап 1 (AskUserQuestion): location, name, url, project
+## Stage 1 (AskUserQuestion): location, name, url, project
 
-Задай сразу 4 вопроса в одном вызове AskUserQuestion:
+Ask 4 questions in one AskUserQuestion call:
 
-1. **Location** — `local` (хранить в `./.claude/skills/jira/` текущего проекта) или `global` (по умолчанию, `~/.claude/skills/jira/`)
-2. **Name профиля** — slug, например `hornyvilla`, `work`, `personal` (Other для ввода)
-3. **URL Jira** — корневой URL инстанса, например `https://your-company.atlassian.net`. ⚠️ **Не полный URL борды** (без `/jira/software/projects/...`). Если юзер даст полный — скрипт сам обрежет до корня (Other)
-4. **Project key** — короткий код проекта, например `HOR`, `PROJ`, `OV` (Other)
+1. **Location** — `local` (store in `./.claude/skills/jira/` of current project) or `global` (default, `~/.claude/skills/jira/`)
+2. **Profile name** — slug, e.g. `work`, `personal`, `myboard` (Other for input)
+3. **Jira URL** — root instance URL, e.g. `https://your-company.atlassian.net`. ⚠️ **Not the full board URL** (no `/jira/software/projects/...`). If user gives full URL — script trims to root (Other)
+4. **Project key** — short code, e.g. `PROJ`, `ABC` (Other)
 
-## Этап 2 (AskUserQuestion): board-id, email, token
+## Stage 2 (AskUserQuestion): board-id, email, token
 
-После получения ответов из этапа 1 — сразу задай ещё 3 вопроса:
+After stage 1 answers — ask 3 more:
 
-5. **Board ID** — число. Найти в URL борды: `.../boards/<ID>` → это `<ID>` (Other)
-6. **Email** — Atlassian-аккаунт (Other)
-7. **API Token** — https://id.atlassian.com/manage-profile/security/api-tokens → Create API token → скопировать (Other)
+5. **Board ID** — integer. Find it in the board URL: `.../boards/<ID>` → this `<ID>` (Other)
+6. **Email** — Atlassian account (Other)
+7. **API Token** — https://id.atlassian.com/manage-profile/security/api-tokens → Create API token → copy (Other)
 
-## Этап 3: запустить init
+## Stage 3: run init
 
 ```bash
 python ~/.claude/skills/jira/scripts/jira_init.py \
@@ -30,4 +30,4 @@ python ~/.claude/skills/jira/scripts/jira_init.py \
   --email <email> --token <token>
 ```
 
-**Выведи stdout дословно в code-блоке** — там результат init + ping. Без лишних комментариев.
+**Print stdout verbatim in a code block** — it contains init + ping result. No extra comments.

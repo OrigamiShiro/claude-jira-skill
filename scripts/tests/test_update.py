@@ -23,23 +23,23 @@ class FindTransitionTests(unittest.TestCase):
         }
 
     def test_match_by_transition_name(self):
-        self.assertEqual(find_transition_id(self.client, "HOR-1", "В работу"), "10")
+        self.assertEqual(find_transition_id(self.client, "PROJ-1", "В работу"), "10")
 
     def test_match_by_target_status(self):
-        self.assertEqual(find_transition_id(self.client, "HOR-1", "Готово"), "20")
+        self.assertEqual(find_transition_id(self.client, "PROJ-1", "Готово"), "20")
 
     def test_case_insensitive(self):
-        self.assertEqual(find_transition_id(self.client, "HOR-1", "ГОТОВО"), "20")
+        self.assertEqual(find_transition_id(self.client, "PROJ-1", "ГОТОВО"), "20")
 
     def test_returns_none_when_missing(self):
-        self.assertIsNone(find_transition_id(self.client, "HOR-1", "Несуществует"))
+        self.assertIsNone(find_transition_id(self.client, "PROJ-1", "Несуществует"))
 
 
 class CmdFieldTests(unittest.TestCase):
     def test_summary_field_passes_string(self):
         client = MagicMock()
         args = MagicMock()
-        args.key = "HOR-1"
+        args.key = "PROJ-1"
         args.field = "summary"
         args.value = "New title"
 
@@ -47,7 +47,7 @@ class CmdFieldTests(unittest.TestCase):
 
         client.put.assert_called_once()
         call_args, call_kwargs = client.put.call_args
-        self.assertEqual(call_args[0], "/rest/api/3/issue/HOR-1")
+        self.assertEqual(call_args[0], "/rest/api/3/issue/PROJ-1")
         self.assertEqual(
             call_kwargs["json"], {"fields": {"summary": "New title"}}
         )
@@ -55,7 +55,7 @@ class CmdFieldTests(unittest.TestCase):
     def test_description_wraps_in_adf(self):
         client = MagicMock()
         args = MagicMock()
-        args.key = "HOR-1"
+        args.key = "PROJ-1"
         args.field = "description"
         args.value = "new desc"
 

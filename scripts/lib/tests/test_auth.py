@@ -50,11 +50,11 @@ class LoadBoardInfoTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             skill = _make_skill_dir(
                 Path(tmp),
-                "hornyvilla",
+                "myboard",
                 {"url": "https://x.atlassian.net", "project_key": "HOR", "board_id": 153},
                 {"email": "u@e.com", "token": "t"},
             )
-            data = load_board_info("hornyvilla", skill_dir=skill)
+            data = load_board_info("myboard", skill_dir=skill)
             self.assertEqual(data["project_key"], "HOR")
 
     def test_raises_on_missing_board(self):
@@ -97,11 +97,11 @@ class LoadCredsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             skill = _make_skill_dir(
                 Path(tmp),
-                "hornyvilla",
+                "myboard",
                 {"url": "https://x.atlassian.net/", "project_key": "HOR", "board_id": 153},
                 {"email": "u@e.com", "token": "T"},
             )
-            creds = load_creds("hornyvilla", skill_dir=skill)
+            creds = load_creds("myboard", skill_dir=skill)
             self.assertIsInstance(creds, BoardCredentials)
             self.assertEqual(creds.base_url, "https://x.atlassian.net")
             self.assertEqual(creds.project_key, "HOR")

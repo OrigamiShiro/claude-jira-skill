@@ -4,7 +4,7 @@
 Примеры:
   python jira_config.py list                    # все профили
   python jira_config.py current                 # активный профиль
-  python jira_config.py show hornyvilla         # детали профиля
+  python jira_config.py show myboard         # детали профиля
   python jira_config.py switch other-board      # сменить активный
   python jira_config.py remove old-board        # удалить профиль
 """

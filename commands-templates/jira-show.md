@@ -1,35 +1,35 @@
 ---
-description: Показать список всех Jira-профилей
+description: Show list of all Jira profiles
 ---
 
-Показать **все** настроенные профили. Напротив активного — метка `active`.
+Show **all** configured profiles. Active one marked `(active)`.
 
-## Шаг 1: получить список
+## Step 1: get list
 
-Запусти:
+Run:
 ```bash
 python ~/.claude/skills/jira/scripts/jira_config.py list
 ```
 
-Парси вывод. Каждая строка:
-- ` *<name>` — активный профиль
-- `  <name>` — обычный
+Parse output. Each line:
+- ` *<name>` — active profile
+- `  <name>` — regular
 
-## Шаг 2: форматированный вывод
+## Step 2: formatted output
 
-Собери список и выведи **в своём ответе в code-блоке**:
+Build a list and print **in your response as a code block**:
 
 ```
 Profiles:
-  1. hornyvilla (active)
-  2. overlewd
-  3. another-board
+  1. myboard (active)
+  2. work
+  3. personal
 ```
 
-Нумерация сквозная (1..N). Метку `(active)` ставь **только** у активного.
+Continuous numbering (1..N). Put `(active)` **only** on the active one.
 
-**Если пользователь указал имя** после `/jira-show <name>` — тогда запусти `python jira_config.py show <name>` и выведи детали конкретного профиля (URL, Project, Board, Email, Token) в code-блоке.
+**If user passed a name** after `/jira-show <name>` — run `python jira_config.py show <name>` and print the specific profile details (URL, Project, Board, Email, Token) in a code block.
 
-**Если профилей нет** — выведи `❌ Профили не настроены. Запусти /jira-init.`
+**If no profiles** — print `❌ No profiles configured. Run /jira-init.`
 
-Без лишних комментариев и вопросов.
+No extra comments or questions.

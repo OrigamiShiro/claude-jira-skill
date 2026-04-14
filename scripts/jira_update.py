@@ -8,10 +8,10 @@ Subcommands:
   field <key> <field> <value>   — обновить произвольное поле (summary, description)
 
 Примеры:
-  python jira_update.py transition HOR-123 "Готово"
-  python jira_update.py assign HOR-123 712020:abc
-  python jira_update.py unassign HOR-123
-  python jira_update.py field HOR-123 summary "New title"
+  python jira_update.py transition PROJ-123 "Готово"
+  python jira_update.py assign PROJ-123 712020:abc
+  python jira_update.py unassign PROJ-123
+  python jira_update.py field PROJ-123 summary "New title"
 """
 
 from __future__ import annotations

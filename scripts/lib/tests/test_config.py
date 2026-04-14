@@ -60,7 +60,7 @@ class FindConfigTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             local = root / ".claude" / "skills" / "jira" / "config.json"
-            _write_config(local, {"active_board": "hornyvilla"})
+            _write_config(local, {"active_board": "myboard"})
 
             with _IsolateGlobalConfig(root):
                 found = find_config(start=root)
@@ -178,9 +178,9 @@ class ActiveBoardTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "config.json"
-            _write_config(path, {"active_board": "hornyvilla"})
+            _write_config(path, {"active_board": "myboard"})
 
-            self.assertEqual(get_active_board(path), "hornyvilla")
+            self.assertEqual(get_active_board(path), "myboard")
 
     def test_get_returns_none_when_missing(self):
         import tempfile

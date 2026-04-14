@@ -1,58 +1,59 @@
 ---
 name: jira
-description: Управление задачами в Jira через CLI-скрипты — создание, перевод статусов, связывание, поиск, worklog, спринты, batch-операции. Поддержка нескольких бордов (профилей) с переключением. Используй при упоминании Jira, ключей вида XYZ-123, командах /jira-*, или работе с задачами/спринтами.
+description: Manage Jira tasks via CLI scripts — create, transition, link, search, worklog, sprints, batch operations. Multi-board (profile) support with switching. Activate when user mentions Jira, issue keys like XYZ-123, `/jira-*` commands, or works with tasks/sprints.
 ---
 
 # Jira CLI Skill
 
-Набор Python-скриптов для работы с Jira Cloud REST API. Single-responsibility — каждый скрипт решает одну задачу.
+Set of Python CLI scripts for Jira Cloud REST API. Single-responsibility — one script, one concern.
 
 ## When to Use
 
-Активируй скилл если пользователь:
+Activate this skill when user:
 
-- Упоминает **Jira**, **issue**, **спринт**, **worklog**, **бэклог**, **борду**
-- Использует ключи задач вида `HOR-123`, `PROJ-42` (буквы-дефис-цифры)
-- Просит **создать**, **закрыть**, **перевести в Done/In Progress**, **залогировать время**, **связать**, **найти задачи**
-- Вызывает любую команду `/jira-*` (init, switch-board, add-board, show, remove, ping)
-- Хочет **массово** что-то сделать с N задачами (используй `jira_batch.py`)
+- Mentions **Jira**, **issue**, **sprint**, **worklog**, **backlog**, **board**
+- Uses issue keys like `ABC-123`, `PROJ-42` (letters-dash-digits)
+- Asks to **create**, **close**, **transition to Done/In Progress**, **log time**, **link**, **find issues**
+- Invokes any `/jira-*` command (init, switch-board, add-board, show, remove, ping, help)
+- Wants **bulk** action on N issues (use `jira_batch.py`)
 
-**Не активируй**, если речь о других трекерах (Linear, Asana, GitHub Issues).
+**Do NOT activate** for other trackers (Linear, Asana, GitHub Issues).
 
-## Slash-команды (триггеры)
+## Slash commands (triggers)
 
-| Команда юзера | Действие агента |
-|---------------|-----------------|
-| `/jira-init` | Запросить через AskUserQuestion: location (local/global), name, url, project, board-id, email, token. Затем `python jira_init.py ...` |
-| `/jira-add-board` | То же что init, но `--name` другой. Существующий профиль не трогать |
-| `/jira-switch-board` | `python jira_config.py list` → AskUserQuestion (выбор) → `jira_config.py switch <name>` |
-| `/jira-show [name]` | `python jira_config.py show [name]` |
-| `/jira-remove-board <name>` | `python jira_config.py remove <name>` |
-| `/jira-ping` | `python jira_ping.py` |
+| User command | Agent action |
+|--------------|--------------|
+| `/jira-init` | Via AskUserQuestion: location (local/global), name, url, project, board-id, email, token. Then `python jira_init.py ...` |
+| `/jira-add-board` | Same as init, but different `--name`. Existing profiles untouched. |
+| `/jira-switch-board` | `python jira_config.py list` → AskUserQuestion (pick) → `jira_config.py switch <name>`. |
+| `/jira-show [name]` | `python jira_config.py show [name]`. |
+| `/jira-remove-board <name>` | `python jira_config.py remove <name>`. |
+| `/jira-ping` | `python jira_ping.py`. |
+| `/jira-help` | Show list of all commands and scripts. |
 
-## Где живёт скилл
+## Where the skill lives
 
-- **Скрипты** (всегда глобально): `~/.claude/skills/jira/scripts/`
-- **Config + boards + creds**: либо локально (`./.claude/skills/jira/`), либо глобально (`~/.claude/skills/jira/`) — выбор юзера при init
-- **Поиск config** (автоматический в `lib/config.py`): сначала `.claude/skills/jira/config.json` от CWD вверх по дереву, потом глобальный
+- **Scripts** (always global): `~/.claude/skills/jira/scripts/`
+- **Config + boards + creds**: either local (`./.claude/skills/jira/`) or global (`~/.claude/skills/jira/`) — chosen by user at init.
+- **Config lookup** (automatic in `lib/config.py`): first `.claude/skills/jira/config.json` walking up from CWD, then global.
 
-## Как агент находит путь к скрипту
+## Script path
 
-Скрипты живут в `~/.claude/skills/jira/scripts/`. Используй:
+Scripts live in `~/.claude/skills/jira/scripts/`. Use:
 
 ```bash
 python ~/.claude/skills/jira/scripts/<script>.py [args]
 ```
 
-На Windows через bash: `python "C:/Users/<USER>/.claude/skills/jira/scripts/<script>.py"`.
+On Windows via bash: `python "C:/Users/<USER>/.claude/skills/jira/scripts/<script>.py"`.
 
-Можно также: `python "$HOME/.claude/skills/jira/scripts/<script>.py"`.
+Or: `python "$HOME/.claude/skills/jira/scripts/<script>.py"`.
 
 ---
 
-## Каталог скриптов
+## Script catalog
 
-### jira_init.py — первичная настройка борды
+### jira_init.py — board setup
 
 ```bash
 python jira_init.py \
@@ -66,112 +67,112 @@ python jira_init.py \
   [--overwrite] [--no-ping]
 ```
 
-| Флаг | Назначение |
-|------|-----------|
-| `--location` | `local` (`.claude/skills/jira/` в CWD) или `global` (`~/.claude/skills/jira/`) |
-| `--name` | Имя профиля (alphanumeric + дефис) |
-| `--url` | Jira URL (например `https://passionpanda.atlassian.net`) |
-| `--project` | Project key (например `HOR`) |
-| `--board-id` | Board ID (целое число) |
-| `--email` | Email Atlassian-аккаунта |
-| `--token` | API token (создаётся на https://id.atlassian.com/manage-profile/security/api-tokens) |
-| `--overwrite` | Перезаписать существующий профиль |
-| `--no-ping` | Не проверять подключение после init |
+| Flag | Purpose |
+|------|---------|
+| `--location` | `local` (`.claude/skills/jira/` in CWD) or `global` (`~/.claude/skills/jira/`) |
+| `--name` | Profile name (alphanumeric + dash) |
+| `--url` | Jira URL (e.g. `https://your-company.atlassian.net`) — full board URLs are normalized to root |
+| `--project` | Project key (e.g. `PROJ`) |
+| `--board-id` | Board ID (integer) |
+| `--email` | Atlassian account email |
+| `--token` | API token (create at https://id.atlassian.com/manage-profile/security/api-tokens) |
+| `--overwrite` | Overwrite existing profile |
+| `--no-ping` | Skip post-init connection check |
 
-**Выход:** `✓ Профиль '<name>' создан` + ping result или предупреждение.
+**Output:** `✓ Profile '<name>' created` + ping result or warning.
 
 ---
 
-### jira_config.py — управление профилями
+### jira_config.py — profile management
 
 ```bash
-python jira_config.py list                    # все профили
-python jira_config.py current                 # активный
-python jira_config.py show [name]             # детали (без name = активный)
-python jira_config.py switch <name>           # сменить активный
-python jira_config.py remove <name>           # удалить профиль
+python jira_config.py list                    # all profiles
+python jira_config.py current                 # active profile
+python jira_config.py show [name]             # details (no name = active)
+python jira_config.py switch <name>           # change active
+python jira_config.py remove <name>           # delete profile
 ```
 
-| Subcommand | Аргументы | Выход |
-|------------|-----------|-------|
-| `list` | — | Список профилей с `*` у активного |
-| `current` | — | Имя активного профиля |
-| `show` | `[name]` | URL, project, board, email, замаскированный токен |
-| `switch` | `<name>` | `✓ Активный профиль: <name>` |
-| `remove` | `<name>` | `✓ Профиль '<name>' удалён` |
+| Subcommand | Args | Output |
+|------------|------|--------|
+| `list` | — | Profile list, `*` marks active |
+| `current` | — | Active profile name |
+| `show` | `[name]` | URL, project, board, email, masked token |
+| `switch` | `<name>` | `✓ Active profile: <name>` |
+| `remove` | `<name>` | `✓ Profile '<name>' removed` |
 
 ---
 
-### jira_ping.py — проверка подключения
+### jira_ping.py — connection check
 
 ```bash
 python jira_ping.py [--board <name>]
 ```
 
-Вызывает `/rest/api/3/myself`. Без `--board` — активный профиль.
+Calls `/rest/api/3/myself`. Without `--board` — active profile.
 
-**Выход:** `✓ Подключено как: <name> (<email>)` + URL/Project/Board.
+**Output:** `✓ Connected as: <name> (<email>)` + URL/Project/Board.
 
 ---
 
-### jira_create.py — создание issue
+### jira_create.py — create issue
 
 ```bash
 python jira_create.py <summary> \
   [-d, --description TEXT] \
-  [-t, --type {Задача|Баг|История|Эпик}] \
+  [-t, --type {Task|Bug|Story|Epic}] \
   [-a, --assignee ACCOUNT_ID] \
   [--no-assignee] \
   [--board <name>]
 ```
 
-| Флаг | Default | Описание |
-|------|---------|----------|
-| `summary` | (обязательный) | Заголовок |
-| `-d, --description` | пусто | Описание (plain text, конвертируется в ADF) |
-| `-t, --type` | `Задача` | Тип issue |
-| `-a, --assignee` | None | accountId исполнителя |
-| `--no-assignee` | False | Не назначать никого |
+| Flag | Default | Description |
+|------|---------|-------------|
+| `summary` | (required) | Issue title |
+| `-d, --description` | empty | Description (plain text, converted to ADF) |
+| `-t, --type` | `Task` | Issue type |
+| `-a, --assignee` | current user | accountId of assignee (defaults to current user) |
+| `--no-assignee` | false | Don't assign anyone |
 
-**Выход:** `✓ Задача создана: HOR-XXX | <browse_url>`.
+**Output:** `✓ Issue created: PROJ-XXX | <browse_url>`.
 
 ---
 
-### jira_delete.py — удаление issue
+### jira_delete.py — delete issue
 
 ```bash
 python jira_delete.py <key1> [<key2> ...] [--delete-subtasks] [--board <name>]
 ```
 
-Удаляет одну или несколько issue. **Необратимо.**
+Deletes one or more issues. **Irreversible.**
 
-| Флаг | Описание |
-|------|----------|
-| `keys` | Один или несколько ключей |
-| `--delete-subtasks` | Удалить вместе с подзадачами (иначе Jira вернёт ошибку если есть subtasks) |
+| Flag | Description |
+|------|-------------|
+| `keys` | One or more keys |
+| `--delete-subtasks` | Delete together with subtasks (otherwise Jira returns error if subtasks exist) |
 
-**Выход:** `✓ HOR-XXX удалена` (на каждую), в конце `✓ N удалено | ✗ M ошибок` если 2+.
+**Output:** `✓ PROJ-XXX deleted` (per issue), summary `✓ N deleted | ✗ M errors` if 2+.
 
 ---
 
-### jira_update.py — обновление issue
+### jira_update.py — update issue
 
 ```bash
 python jira_update.py [--board <name>] <subcommand> ...
 ```
 
-| Subcommand | Аргументы | Описание |
-|------------|-----------|----------|
-| `transition` | `<key> <status>` | Сменить статус (имя статуса или transition name) |
-| `assign` | `<key> <account_id>` | Назначить assignee |
-| `unassign` | `<key>` | Снять assignee |
-| `field` | `<key> <field> <value>` | Обновить поле (`summary`, `description`, etc.) |
+| Subcommand | Args | Description |
+|------------|------|-------------|
+| `transition` | `<key> <status>` | Change status (status name or transition name) |
+| `assign` | `<key> <account_id>` | Set assignee |
+| `unassign` | `<key>` | Remove assignee |
+| `field` | `<key> <field> <value>` | Update any field (`summary`, `description`, etc.) |
 
-**Выход:** `✓ <key> → <status>`, `✓ <key> назначен на <id>`, `✓ <key>.<field> обновлено`.
+**Output:** `✓ <key> → <status>`, `✓ <key> assigned to <id>`, `✓ <key>.<field> updated`.
 
 ---
 
-### jira_search.py — JQL поиск
+### jira_search.py — JQL search
 
 ```bash
 python jira_search.py "<JQL>" \
@@ -180,199 +181,199 @@ python jira_search.py "<JQL>" \
   [--board <name>]
 ```
 
-| Флаг | Default | Описание |
-|------|---------|----------|
-| `JQL` | (обязательный) | Например `project=HOR AND status='В работе'` |
-| `--limit` | 50 | Максимум результатов |
-| `--fields` | `summary,status,issuetype` | Поля через запятую: `key`, `summary`, `status`, `issuetype`, `assignee`, или произвольное |
+| Flag | Default | Description |
+|------|---------|-------------|
+| `JQL` | (required) | E.g. `project=PROJ AND status='In Progress'` |
+| `--limit` | 50 | Max results |
+| `--fields` | `summary,status,issuetype` | Comma-separated: `key`, `summary`, `status`, `issuetype`, `assignee`, or any field |
 
-**Выход:** Таблица `KEY | <fields>` + `Found: N`.
+**Output:** Table `KEY | <fields>` + `Found: N`.
 
 ---
 
-### jira_link.py — связи между issues
+### jira_link.py — issue links
 
 ```bash
 python jira_link.py [--board <name>] <subcommand>
 ```
 
-| Subcommand | Аргументы | Описание |
-|------------|-----------|----------|
-| `add` | `<inward> <outward> --type TYPE` | Создать связь (inward = "child"/"blocked", outward = "parent"/"blocker") |
-| `remove` | `<link_id>` | Удалить связь по ID |
-| `list` | `<key>` | Все связи issue (показывает ID для последующего remove) |
-| `types` | — | Доступные типы связей с ID |
+| Subcommand | Args | Description |
+|------------|------|-------------|
+| `add` | `<inward> <outward> --type TYPE` | Create link (inward = "child"/"blocked", outward = "parent"/"blocker") |
+| `remove` | `<link_id>` | Delete link by ID |
+| `list` | `<key>` | All links for issue (shows IDs for remove) |
+| `types` | — | Available link types with IDs |
 
-**Алиасы для `--type`:**
+**Aliases for `--type`:**
 - `parent-child` → 10007 (`is child of` ↔ `is parent of`)
 - `blocks` → 10000 (`is blocked by` ↔ `blocks`)
 - `relates` → 10003 (`relates to` ↔ `relates to`)
 - `duplicate` → 10002
 - `cloners` → 10001
 
-Можно передать ID напрямую: `--type 10007`.
+Or pass ID directly: `--type 10007`.
 
-**Выход:** `✓ HOR-1 ← HOR-2 (type id 10007)`.
+**Output:** `✓ PROJ-1 ← PROJ-2 (type id 10007)`.
 
 ---
 
-### jira_worklog.py — журнал работы
+### jira_worklog.py — work log
 
 ```bash
 python jira_worklog.py [--board <name>] <subcommand>
 ```
 
-| Subcommand | Аргументы | Описание |
-|------------|-----------|----------|
-| `add` | `<key> <time> [--comment TEXT] [--started ISO]` | Добавить запись. `time`: `"3h 15m"`, `"1d"`, `"30m"`, `"1w"` |
-| `list` | `<key>` | Все worklogs |
-| `remove` | `<key> <worklog_id>` | Удалить worklog |
+| Subcommand | Args | Description |
+|------------|------|-------------|
+| `add` | `<key> <time> [--comment TEXT] [--started ISO]` | Add entry. `time`: `"3h 15m"`, `"1d"`, `"30m"`, `"1w"` |
+| `list` | `<key>` | All worklogs |
+| `remove` | `<key> <worklog_id>` | Remove worklog |
 
-**Выход:** `✓ Worklog добавлен: <key> 3h 15m (id <wid>)`.
+**Output:** `✓ Worklog added: <key> 3h 15m (id <wid>)`.
 
 ---
 
-### jira_sprint.py — спринты (Agile)
+### jira_sprint.py — sprints (Agile)
 
 ```bash
 python jira_sprint.py [--board <name>] <subcommand>
 ```
 
-| Subcommand | Аргументы | Описание |
-|------------|-----------|----------|
-| `list` | `[--state {active|future|closed}] [--board-id N]` | Список спринтов борды |
-| `show` | `<sprint_id>` | Детали + issues в спринте |
-| `create` | `--name NAME [--goal TEXT] [--start ISO] [--end ISO] [--board-id N]` | Создать спринт |
-| `move` | `<sprint_id> <key1> [<key2> ...]` | Переместить issues |
-| `start` | `<sprint_id> [--start ISO] [--end ISO]` | Запустить спринт |
-| `complete` | `<sprint_id>` | Закрыть спринт |
+| Subcommand | Args | Description |
+|------------|------|-------------|
+| `list` | `[--state {active|future|closed}] [--board-id N]` | Board sprints |
+| `show` | `<sprint_id>` | Details + issues |
+| `create` | `--name NAME [--goal TEXT] [--start ISO] [--end ISO] [--board-id N]` | Create sprint |
+| `move` | `<sprint_id> <key1> [<key2> ...]` | Move issues into sprint |
+| `start` | `<sprint_id> [--start ISO] [--end ISO]` | Start sprint |
+| `complete` | `<sprint_id>` | Close sprint |
 
-**Выход:**
-- `Board <id>:` + список `[sprint_id] <name> (state)`
-- `✓ Спринт '<name>' создан (id: N)`
-- `✓ N issue(s) перемещены в спринт <id>`
+**Output:**
+- `Board <id>:` + list `[sprint_id] <name> (state)`
+- `✓ Sprint '<name>' created (id: N)`
+- `✓ N issue(s) moved to sprint <id>`
 
 ---
 
-### jira_batch.py — массовые операции
+### jira_batch.py — bulk operations
 
 ```bash
 python jira_batch.py [--file <path>] [--board <name>]
 ```
 
-Принимает JSON-массив команд из `--file` или stdin.
+Accepts JSON array of commands from `--file` or stdin.
 
-**Поддерживаемые операции (`op`):**
+**Supported operations (`op`):**
 
-| `op` | Поля |
-|------|------|
+| `op` | Fields |
+|------|--------|
 | `transition` | `key`, `status` |
-| `worklog` | `key`, `time`, `comment` (опц.), `started` (опц.) |
+| `worklog` | `key`, `time`, `comment` (opt.), `started` (opt.) |
 | `link` | `inward`, `outward`, `type` |
 | `assign` | `key`, `account_id` |
 | `unassign` | `key` |
-| `delete` | `key`, `delete_subtasks` (bool, опц.) |
+| `delete` | `key`, `delete_subtasks` (bool, opt.) |
 
-**Пример JSON:**
+**Example JSON:**
 ```json
 [
-  {"op": "transition", "key": "HOR-1", "status": "Готово"},
-  {"op": "worklog", "key": "HOR-1", "time": "2h", "comment": "fix bug"},
-  {"op": "link", "inward": "HOR-2", "outward": "HOR-1", "type": "parent-child"}
+  {"op": "transition", "key": "PROJ-1", "status": "Done"},
+  {"op": "worklog", "key": "PROJ-1", "time": "2h", "comment": "fix bug"},
+  {"op": "link", "inward": "PROJ-2", "outward": "PROJ-1", "type": "parent-child"}
 ]
 ```
 
-**Выход:** построчные результаты + сводка `✓ N успехов | ✗ M ошибок`.
+**Output:** per-line results + summary `✓ N success | ✗ M errors`.
 
 ---
 
-## Сценарии (флоу)
+## Scenarios (flows)
 
-### Первый запуск (`/jira-init`)
+### First run (`/jira-init`)
 
-1. Агент собирает данные через `AskUserQuestion`:
-   - Location: `local` (хранить в проекте) или `global` (для всех проектов)
-   - Name профиля (slug)
-   - URL Jira
+1. Agent collects via `AskUserQuestion`:
+   - Location: `local` (project) or `global` (all projects)
+   - Profile name (slug)
+   - Jira URL
    - Project key
    - Board ID
    - Email
    - API token
-2. Запускает: `python ~/.claude/skills/jira/scripts/jira_init.py --location ... --name ... --url ... --project ... --board-id ... --email ... --token ...`
-3. Скрипт сам делает ping в конце.
-4. Сообщает: `✓ Профиль '<name>' создан и подключён`.
+2. Run: `python ~/.claude/skills/jira/scripts/jira_init.py --location ... --name ... --url ... --project ... --board-id ... --email ... --token ...`
+3. Script auto-pings at the end.
+4. Report: `✓ Profile '<name>' created and connected`.
 
-### Добавление новой борды (`/jira-add-board`)
+### Add new board (`/jira-add-board`)
 
-То же что init, но `--name <new>`. Существующий профиль не трогается. После — активным становится новый (последний init).
+Same as init but with new `--name`. Existing profile untouched. After init the newly created becomes active (init always sets the freshly created as active).
 
-### Переключение борды (`/jira-switch-board`)
+### Switch board (`/jira-switch-board`)
 
-1. `python jira_config.py list` — получить список.
-2. Через `AskUserQuestion` показать профили, дать выбрать.
+1. `python jira_config.py list` — get list.
+2. Show profiles via `AskUserQuestion`, let user pick.
 3. `python jira_config.py switch <chosen>`.
 
-### Показать активный (`/jira-show`)
+### Show active (`/jira-show`)
 
-`python jira_config.py current` — короткий вывод (только имя).
-`python jira_config.py show` — подробности с маской токена.
+`python jira_config.py current` — brief output (name only).
+`python jira_config.py show` — details with masked token.
 
-### Несколько бордов в сессии — что делать
+### Multiple boards in session — what to do
 
-**НЕ надо переспрашивать каждый раз.** Active board в `config.json` живёт до явного `/jira-switch-board`. Все скрипты читают `config.json` — если активный профиль установлен, используют его.
+**Do NOT re-ask every time.** Active board in `config.json` persists until explicit `/jira-switch-board`. All scripts read `config.json` — if active profile is set, they use it.
 
-Если вызвал команду и скрипт ответил "Активная борда не выбрана" → агент **сам** запускает флоу `/jira-switch-board` или `/jira-init`.
+If you call a command and the script returns "No active board selected" → agent **itself** runs `/jira-switch-board` or `/jira-init`.
 
 ---
 
-## Формат ответа в контекст
+## Response format (in context)
 
-**Правила:**
-1. **Однострочный итог** — выводи только ключевую информацию. JSON-ответы API не лей в контекст.
-2. **Префиксы:** `✓` (успех), `❌` (ошибка), `⚠` (предупреждение).
-3. **Ключи и URL** — обязательны для созданных/изменённых issues.
+**Rules:**
+1. **One-line summary** — output only the essence. Don't leak API JSON responses.
+2. **Prefixes:** `✓` (success), `❌` (error), `⚠` (warning).
+3. **Keys and URLs** — mandatory for created/changed issues.
 
-**Шаблоны успеха:**
+**Success templates:**
 ```
-✓ Задача создана: HOR-258 | https://passionpanda.atlassian.net/browse/HOR-258
-✓ HOR-258 → Готово
-✓ HOR-258 назначен на 712020:abc
-✓ HOR-258 ← HOR-21 (type id 10007)
-✓ Worklog добавлен: HOR-258 3h 15m (id 23016)
-✓ Спринт 'Sprint 5' создан (id: 30)
-✓ 5 операций | ✗ 0 ошибок
+✓ Issue created: PROJ-123 | https://your-company.atlassian.net/browse/PROJ-123
+✓ PROJ-123 → Done
+✓ PROJ-123 assigned to 712020:abc
+✓ PROJ-123 ← PROJ-42 (type id 10007)
+✓ Worklog added: PROJ-123 3h 15m (id 23016)
+✓ Sprint 'Sprint 5' created (id: 30)
+✓ 5 ops | ✗ 0 errors
 ```
 
-**Шаблоны ошибок:**
+**Error templates:**
 ```
-❌ Unauthorized (401). Проверь email и API token.
+❌ Unauthorized (401). Check email and API token.
 ❌ Resource not found (404): https://...
-❌ Профиль 'ghost' не найден. Доступны: hornyvilla, other
-❌ Переход в статус 'Несуществует' недоступен для HOR-1
+❌ Profile 'ghost' not found. Available: alpha, beta
+❌ Transition to 'Unknown' unavailable for PROJ-1
 ```
 
-**Что НЕ делать:**
-- Не пиши «вот результат API: {...}»
-- Не дублируй полный JSON-payload созданного issue
-- Не повторяй одно и то же сообщение если batch обработал 100 элементов — выведи сводку
+**Do NOT:**
+- Say "here's the API result: {...}"
+- Duplicate full JSON payload of created issue
+- Repeat the same message for 100 batch items — print a summary
 
 ---
 
-## Установка зависимостей
+## Install dependencies
 
-Скилл требует только `requests`:
+Skill only needs `requests`:
 
 ```bash
 pip install requests
 ```
 
-Для коллег: `pip install -r ~/.claude/skills/jira/requirements.txt`.
+For colleagues: `pip install -r ~/.claude/skills/jira/requirements.txt`.
 
 ---
 
-## Тесты
+## Tests
 
-В скилле 93 unit-теста (`scripts/lib/tests/` и `scripts/tests/`):
+93 unit tests in `scripts/lib/tests/` and `scripts/tests/`:
 
 ```bash
 cd ~/.claude/skills/jira/scripts
@@ -380,28 +381,28 @@ python -m unittest discover -s lib/tests
 python -m unittest discover -s tests
 ```
 
-Все тесты автономные (mock requests), не требуют живого Jira-инстанса. Subprocess-тесты используют env-флаги `JIRA_SKILL_NO_UPWARD_SEARCH=1` и `JIRA_SKILL_GLOBAL_CONFIG=<fake_path>` для изоляции.
+All tests are self-contained (mock requests), no live Jira required. Subprocess tests use env flags `JIRA_SKILL_NO_UPWARD_SEARCH=1` and `JIRA_SKILL_GLOBAL_CONFIG=<fake_path>` for isolation.
 
 ---
 
-## Env-переменные
+## Env variables
 
-| Переменная | Назначение |
-|------------|-----------|
-| `JIRA_SKILL_GLOBAL_CONFIG` | Override пути к глобальному config (для тестов) |
-| `JIRA_SKILL_NO_UPWARD_SEARCH` | `1` отключает поиск config вверх по дереву (для тестов) |
+| Variable | Purpose |
+|----------|---------|
+| `JIRA_SKILL_GLOBAL_CONFIG` | Override global config path (for tests) |
+| `JIRA_SKILL_NO_UPWARD_SEARCH` | `1` disables upward config lookup (for tests) |
 
-В обычной работе эти переменные **не нужны**.
+Not needed in normal operation.
 
 ---
 
 ## Troubleshooting
 
-| Симптом | Причина | Решение |
-|---------|---------|---------|
-| `❌ Unauthorized (401)` | Неверный токен или email | Проверь `.claude/skills/jira/creds/<name>.json`, перегенерируй токен |
-| `❌ Resource not found (404)` | Неправильный issue key или URL | Проверь правильность ключа/URL |
-| `❌ Активная борда не выбрана` | `config.json` без `active_board` | Запусти `/jira-init` или `/jira-switch-board` |
-| `❌ config.json не найден` | Скилл не настроен | `/jira-init` |
-| `❌ Переход в статус '...' недоступен` | Workflow не позволяет такую транзицию | Проверь доступные через `jira_search` |
-| Юникод-ошибки на Windows | Старая консоль cp1252 | Скрипты сами переключают UTF-8 — обнови Python ≥3.7 |
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `❌ Unauthorized (401)` | Invalid token or email | Check `.claude/skills/jira/creds/<name>.json`, regenerate token |
+| `❌ Resource not found (404)` | Wrong issue key or URL | Verify key/URL |
+| `❌ No active board selected` | `config.json` without `active_board` | Run `/jira-init` or `/jira-switch-board` |
+| `❌ config.json not found` | Skill not configured | `/jira-init` |
+| `❌ Transition '...' unavailable` | Workflow doesn't allow this transition | Check available transitions via `jira_search` |
+| Unicode errors on Windows | Old cp1252 console | Scripts auto-switch to UTF-8 — update Python ≥3.7 |

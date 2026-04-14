@@ -48,11 +48,11 @@ class CmdAddTests(unittest.TestCase):
     def test_posts_correct_endpoint(self):
         client = MagicMock()
         client.post.return_value = {"id": "999"}
-        args = MagicMock(key="HOR-1", time="2h", comment="x", started=None)
+        args = MagicMock(key="PROJ-1", time="2h", comment="x", started=None)
         cmd_add(args, client)
 
         call_args, call_kwargs = client.post.call_args
-        self.assertEqual(call_args[0], "/rest/api/3/issue/HOR-1/worklog")
+        self.assertEqual(call_args[0], "/rest/api/3/issue/PROJ-1/worklog")
         self.assertEqual(call_kwargs["json"]["timeSpent"], "2h")
 
 

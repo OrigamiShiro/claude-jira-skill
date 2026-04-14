@@ -11,9 +11,9 @@ Subcommands:
   remove <key> <worklog_id>
 
 Примеры:
-  python jira_worklog.py add HOR-1 "3h 15m" --comment "История 1.1 done"
-  python jira_worklog.py list HOR-1
-  python jira_worklog.py remove HOR-1 12345
+  python jira_worklog.py add PROJ-1 "3h 15m" --comment "История 1.1 done"
+  python jira_worklog.py list PROJ-1
+  python jira_worklog.py remove PROJ-1 12345
 """
 
 from __future__ import annotations

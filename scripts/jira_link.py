@@ -17,8 +17,8 @@ Subcommands:
 Можно использовать ID типа напрямую: --type 10007
 
 Примеры:
-  python jira_link.py add HOR-1 HOR-2 --type parent-child
-  python jira_link.py list HOR-1
+  python jira_link.py add PROJ-1 PROJ-2 --type parent-child
+  python jira_link.py list PROJ-1
   python jira_link.py types
 """
 

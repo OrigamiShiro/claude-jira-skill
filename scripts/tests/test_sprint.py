@@ -78,12 +78,12 @@ class CmdCreateTests(unittest.TestCase):
 class CmdMoveTests(unittest.TestCase):
     def test_posts_issues_array(self):
         client = _make_client()
-        args = MagicMock(sprint_id=17, keys=["HOR-1", "HOR-2"])
+        args = MagicMock(sprint_id=17, keys=["PROJ-1", "PROJ-2"])
         cmd_move(args, client)
 
         call_args, call_kwargs = client.post.call_args
         self.assertEqual(call_args[0], "/rest/agile/1.0/sprint/17/issue")
-        self.assertEqual(call_kwargs["json"], {"issues": ["HOR-1", "HOR-2"]})
+        self.assertEqual(call_kwargs["json"], {"issues": ["PROJ-1", "PROJ-2"]})
 
 
 class CmdStartCompleteTests(unittest.TestCase):

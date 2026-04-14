@@ -3,7 +3,7 @@
 
 Примеры:
   python jira_ping.py                    # активный профиль
-  python jira_ping.py --board hornyvilla # конкретный профиль
+  python jira_ping.py --board myboard # конкретный профиль
 """
 
 from __future__ import annotations

@@ -7,7 +7,7 @@
 
 Структура config.json:
 {
-  "active_board": "hornyvilla",
+  "active_board": "myboard",
   "location": "global" | "local"
 }
 """

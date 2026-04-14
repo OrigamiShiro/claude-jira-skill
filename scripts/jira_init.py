@@ -11,8 +11,8 @@ skill-dir выбирается через --location:
   local  → ./.claude/skills/jira/      (в текущей директории)
 
 Пример:
-  python jira_init.py --location global --name hornyvilla \\
-      --url https://passionpanda.atlassian.net --project HOR --board-id 153 \\
+  python jira_init.py --location global --name myboard \\
+      --url https://your-company.atlassian.net --project HOR --board-id 153 \\
       --email me@example.com --token ATATT3xFfG...
 """
 

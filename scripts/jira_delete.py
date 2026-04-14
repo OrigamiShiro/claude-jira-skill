@@ -4,9 +4,9 @@
 ВНИМАНИЕ: необратимая операция.
 
 Примеры:
-  python jira_delete.py HOR-258
-  python jira_delete.py HOR-1 HOR-2 HOR-3        # batch
-  python jira_delete.py HOR-1 --delete-subtasks  # удалить вместе с подзадачами
+  python jira_delete.py PROJ-258
+  python jira_delete.py PROJ-1 PROJ-2 PROJ-3        # batch
+  python jira_delete.py PROJ-1 --delete-subtasks  # удалить вместе с подзадачами
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ def main() -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("keys", nargs="+", help="Ключи issue для удаления (HOR-1 HOR-2 ...)")
+    parser.add_argument("keys", nargs="+", help="Ключи issue для удаления (PROJ-1 PROJ-2 ...)")
     parser.add_argument(
         "--delete-subtasks",
         action="store_true",

@@ -1,27 +1,29 @@
 ---
-description: Переключить активный Jira-профиль (интерактивный выбор)
+description: Switch active Jira profile (interactive picker)
 ---
 
-## Шаг 1: получить список профилей
+Switch active Jira board.
 
-Запусти:
+## Step 1: get profile list
+
+Run:
 ```bash
 python ~/.claude/skills/jira/scripts/jira_config.py list
 ```
 
-Выведи stdout в code-блоке.
+Print stdout in a code block.
 
-## Шаг 2: спросить пользователя
+## Step 2: ask user
 
-Через `AskUserQuestion` покажи профили из списка и дай выбрать (один).
+Via `AskUserQuestion` show profiles from list and let user pick one.
 
-## Шаг 3: переключить
+## Step 3: switch
 
-Запусти:
+Run:
 ```bash
-python ~/.claude/skills/jira/scripts/jira_config.py switch <выбранный>
+python ~/.claude/skills/jira/scripts/jira_config.py switch <chosen>
 ```
 
-**Выведи stdout дословно в code-блоке.** Без лишних комментариев.
+**Print stdout verbatim in a code block.** No extra comments.
 
-Если профилей нет — предложи `/jira-init`.
+If no profiles exist — suggest `/jira-init`.

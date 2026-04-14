@@ -1,33 +1,33 @@
 ---
-description: Добавить ещё одну Jira-борду (новый профиль)
+description: Add another Jira board (new profile)
 ---
 
-То же что `/jira-init`, но для дополнительной борды — существующие профили не трогать.
+Same as `/jira-init`, but for adding an additional board — existing profiles untouched.
 
-Собери **7 полей** в **два этапа** AskUserQuestion (у него лимит 4 вопроса за вызов):
+Collect **7 fields** in **two AskUserQuestion stages** (4-question limit per call):
 
-## Этап 1: location, name, url, project
+## Stage 1: location, name, url, project
 
-1. **Location** — `local` или `global`
-2. **Name** — новый slug (не должен совпадать с существующими — можно проверить через `python ~/.claude/skills/jira/scripts/jira_config.py list`)
-3. **URL Jira** — корневой (например `https://company.atlassian.net`, без хвостов). Скрипт сам обрежет полный URL до корня.
-4. **Project key** — например `PROJ`
+1. **Location** — `local` or `global`
+2. **Name** — new slug (must not collide with existing; check via `python ~/.claude/skills/jira/scripts/jira_config.py list`)
+3. **Jira URL** — root (e.g. `https://company.atlassian.net`, without suffixes). Script will trim full URLs to root.
+4. **Project key** — e.g. `PROJ`
 
-## Этап 2: board-id, email, token
+## Stage 2: board-id, email, token
 
-5. **Board ID** — число (из URL борды `.../boards/<ID>`)
-6. **Email** — Atlassian-аккаунт
+5. **Board ID** — integer (from board URL `.../boards/<ID>`)
+6. **Email** — Atlassian account
 7. **API Token** — https://id.atlassian.com/manage-profile/security/api-tokens
 
-## Запуск
+## Run
 
 ```bash
 python ~/.claude/skills/jira/scripts/jira_init.py \
-  --location <loc> --name <новое имя> \
+  --location <loc> --name <new name> \
   --url <url> --project <key> --board-id <id> \
   --email <email> --token <token>
 ```
 
-**Выведи stdout дословно в code-блоке.**
+**Print stdout verbatim in a code block.**
 
-После init активным становится последний созданный профиль. Если нужно вернуться к старому — предложи `/jira-switch-board`.
+After init the newly created becomes active. If user wants to keep old profile active — suggest `/jira-switch-board`.

@@ -19,7 +19,7 @@ class WriteBoardFilesTests(unittest.TestCase):
             skill = Path(tmp) / "skill"
             write_board_files(
                 skill_dir=skill,
-                name="hornyvilla",
+                name="myboard",
                 url="https://x.atlassian.net/",
                 project_key="HOR",
                 board_id=153,
@@ -27,10 +27,10 @@ class WriteBoardFilesTests(unittest.TestCase):
                 token="T",
             )
             board = json.loads(
-                (skill / "boards" / "hornyvilla.json").read_text(encoding="utf-8")
+                (skill / "boards" / "myboard.json").read_text(encoding="utf-8")
             )
             creds = json.loads(
-                (skill / "creds" / "hornyvilla.json").read_text(encoding="utf-8")
+                (skill / "creds" / "myboard.json").read_text(encoding="utf-8")
             )
             self.assertEqual(board["url"], "https://x.atlassian.net")  # trailing / стрипнут
             self.assertEqual(board["project_key"], "HOR")

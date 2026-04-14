@@ -16,7 +16,7 @@ from jira_batch import OP_HANDLERS, execute, load_ops, op_link  # noqa: E402
 
 class LoadOpsTests(unittest.TestCase):
     def test_from_stdin(self):
-        data = [{"op": "transition", "key": "HOR-1", "status": "Done"}]
+        data = [{"op": "transition", "key": "PROJ-1", "status": "Done"}]
         with patch("sys.stdin", io.StringIO(json.dumps(data))):
             result = load_ops(None)
         self.assertEqual(result, data)
@@ -42,8 +42,8 @@ class ExecuteTests(unittest.TestCase):
         # transition требует find_transition_id → mock client.get
         client.get.return_value = {"transitions": []}
         ops = [
-            {"op": "transition", "key": "HOR-1", "status": "Ghost"},  # fail
-            {"op": "assign", "key": "HOR-2", "account_id": "abc"},  # ok
+            {"op": "transition", "key": "PROJ-1", "status": "Ghost"},  # fail
+            {"op": "assign", "key": "PROJ-2", "account_id": "abc"},  # ok
         ]
         captured = io.StringIO()
         with patch("sys.stdout", captured):
@@ -56,7 +56,7 @@ class ExecuteTests(unittest.TestCase):
 class OpLinkTests(unittest.TestCase):
     def test_resolves_alias(self):
         client = MagicMock()
-        op = {"inward": "HOR-1", "outward": "HOR-2", "type": "parent-child"}
+        op = {"inward": "PROJ-1", "outward": "PROJ-2", "type": "parent-child"}
         op_link(client, op)
         call_args, call_kwargs = client.post.call_args
         self.assertEqual(call_args[0], "/rest/api/3/issueLink")

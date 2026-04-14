@@ -105,8 +105,8 @@ class HandleResponseTests(unittest.TestCase):
             self.client._handle_response(resp)
 
     def test_200_returns_json(self):
-        resp = _mock_response(200, json_data={"key": "HOR-1"})
-        self.assertEqual(self.client._handle_response(resp), {"key": "HOR-1"})
+        resp = _mock_response(200, json_data={"key": "PROJ-1"})
+        self.assertEqual(self.client._handle_response(resp), {"key": "PROJ-1"})
 
     def test_204_returns_none(self):
         resp = _mock_response(204)
@@ -141,7 +141,7 @@ class HttpVerbsTests(unittest.TestCase):
     def test_delete_calls_session(self):
         with patch.object(self.client._session, "delete") as mock_delete:
             mock_delete.return_value = _mock_response(204)
-            result = self.client.delete("/rest/api/3/issue/HOR-1")
+            result = self.client.delete("/rest/api/3/issue/PROJ-1")
             self.assertIsNone(result)
 
     def test_myself_helper(self):
@@ -154,8 +154,8 @@ class HttpVerbsTests(unittest.TestCase):
 
     def test_browse_url(self):
         self.assertEqual(
-            self.client.browse_url("HOR-42"),
-            "https://example.atlassian.net/browse/HOR-42",
+            self.client.browse_url("PROJ-42"),
+            "https://example.atlassian.net/browse/PROJ-42",
         )
 
 

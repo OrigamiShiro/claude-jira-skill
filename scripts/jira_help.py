@@ -74,11 +74,11 @@ def print_examples():
     print('  python jira_create.py "New feature" -t История')
     print()
     print("  # Закрыть и залогировать время")
-    print("  python jira_update.py transition HOR-1 \"Готово\"")
-    print('  python jira_worklog.py add HOR-1 "2h 30m" --comment "done"')
+    print("  python jira_update.py transition PROJ-1 \"Готово\"")
+    print('  python jira_worklog.py add PROJ-1 "2h 30m" --comment "done"')
     print()
     print("  # Batch")
-    print('  echo \'[{"op":"transition","key":"HOR-1","status":"Готово"}]\' | python jira_batch.py')
+    print('  echo \'[{"op":"transition","key":"PROJ-1","status":"Готово"}]\' | python jira_batch.py')
     print()
 
 

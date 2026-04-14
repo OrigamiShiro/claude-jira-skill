@@ -1,18 +1,20 @@
 ---
-description: Удалить Jira-профиль (боард + креды)
+description: Remove a Jira profile (board + credentials)
 ---
 
-## Если имя не указано — спросить
+Remove a Jira board profile.
 
-1. Запусти `python ~/.claude/skills/jira/scripts/jira_config.py list`, выведи stdout.
-2. Через `AskUserQuestion` дай пользователю выбрать профиль для удаления.
+## If name not provided — ask
 
-## Удалить
+1. Run `python ~/.claude/skills/jira/scripts/jira_config.py list`, print stdout.
+2. Via `AskUserQuestion` let user pick profile to remove.
+
+## Remove
 
 ```bash
 python ~/.claude/skills/jira/scripts/jira_config.py remove <name>
 ```
 
-**Выведи stdout дословно в code-блоке.** Без лишних комментариев.
+**Print stdout verbatim in a code block.** No extra comments.
 
-Если удалили активный — предложи `/jira-switch-board` или `/jira-init`.
+If the removed profile was active — suggest `/jira-switch-board` or `/jira-init`.

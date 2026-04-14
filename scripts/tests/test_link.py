@@ -32,7 +32,7 @@ class ResolveTypeIdTests(unittest.TestCase):
 class CmdAddTests(unittest.TestCase):
     def test_posts_correct_payload(self):
         client = MagicMock()
-        args = MagicMock(inward="HOR-1", outward="HOR-2", type="parent-child")
+        args = MagicMock(inward="PROJ-1", outward="PROJ-2", type="parent-child")
         cmd_add(args, client)
 
         client.post.assert_called_once()
@@ -40,8 +40,8 @@ class CmdAddTests(unittest.TestCase):
         self.assertEqual(call_args[0], "/rest/api/3/issueLink")
         payload = call_kwargs["json"]
         self.assertEqual(payload["type"]["id"], "10007")
-        self.assertEqual(payload["inwardIssue"]["key"], "HOR-1")
-        self.assertEqual(payload["outwardIssue"]["key"], "HOR-2")
+        self.assertEqual(payload["inwardIssue"]["key"], "PROJ-1")
+        self.assertEqual(payload["outwardIssue"]["key"], "PROJ-2")
 
 
 class CmdListTests(unittest.TestCase):
@@ -54,17 +54,17 @@ class CmdListTests(unittest.TestCase):
                     {
                         "id": "100",
                         "type": {"inward": "is child of", "outward": "is parent of"},
-                        "outwardIssue": {"key": "HOR-PARENT"},
+                        "outwardIssue": {"key": "PROJ-PARENT"},
                     },
                     {
                         "id": "200",
                         "type": {"inward": "is blocked by", "outward": "blocks"},
-                        "inwardIssue": {"key": "HOR-BLOCKED"},
+                        "inwardIssue": {"key": "PROJ-BLOCKED"},
                     },
                 ]
             }
         }
-        args = MagicMock(key="HOR-FOCAL")
+        args = MagicMock(key="PROJ-FOCAL")
 
         # Перехватываем print через io
         from io import StringIO
@@ -76,9 +76,9 @@ class CmdListTests(unittest.TestCase):
 
         output = captured.getvalue()
         # focal — outwardIssue в первом link → она inwardIssue, имеет inward verb к other
-        self.assertIn("is child of HOR-PARENT", output)
+        self.assertIn("is child of PROJ-PARENT", output)
         # focal — inwardIssue во втором link → она outwardIssue, имеет outward verb к other
-        self.assertIn("blocks HOR-BLOCKED", output)
+        self.assertIn("blocks PROJ-BLOCKED", output)
 
 
 if __name__ == "__main__":

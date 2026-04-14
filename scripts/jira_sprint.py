@@ -14,7 +14,7 @@ Subcommands:
   python jira_sprint.py list --state future
   python jira_sprint.py show 17
   python jira_sprint.py create --name "Sprint 5" --goal "Foundation"
-  python jira_sprint.py move 17 HOR-1 HOR-2 HOR-3
+  python jira_sprint.py move 17 PROJ-1 PROJ-2 PROJ-3
 """
 
 from __future__ import annotations

@@ -2,10 +2,10 @@
 Массовые операции через JSON.
 
 Принимает JSON-массив команд из файла или stdin. Каждая команда:
-  {"op": "transition", "key": "HOR-1", "status": "Готово"}
-  {"op": "worklog", "key": "HOR-1", "time": "2h", "comment": "..."}
-  {"op": "link", "inward": "HOR-1", "outward": "HOR-2", "type": "parent-child"}
-  {"op": "assign", "key": "HOR-1", "account_id": "712020:abc"}
+  {"op": "transition", "key": "PROJ-1", "status": "Готово"}
+  {"op": "worklog", "key": "PROJ-1", "time": "2h", "comment": "..."}
+  {"op": "link", "inward": "PROJ-1", "outward": "PROJ-2", "type": "parent-child"}
+  {"op": "assign", "key": "PROJ-1", "account_id": "712020:abc"}
 
 Примеры:
   python jira_batch.py --file ops.json

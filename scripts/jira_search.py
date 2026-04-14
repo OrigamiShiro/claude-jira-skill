@@ -4,7 +4,7 @@
 Примеры:
   python jira_search.py "project=HOR AND status='В работе'"
   python jira_search.py "assignee=currentUser()" --limit 10
-  python jira_search.py "key=HOR-21" --fields key,summary,status
+  python jira_search.py "key=PROJ-21" --fields key,summary,status
 """
 
 from __future__ import annotations

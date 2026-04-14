@@ -1,21 +1,22 @@
 # Examples
 
-Шаблоны конфигов для скилла.
+Config templates for the skill.
 
-## Файлы
+## Files
 
-- `board.example.json` — структура `boards/<name>.json` (публичная инфа)
-- `creds.example.json` — структура `creds/<name>.json` (секреты, в `.gitignore`)
-- `config.example.json` — структура `config.json` (активный профиль)
-- `batch.example.json` — пример входа для `jira_batch.py`
+- `board.example.json` — structure of `boards/<name>.json` (public info)
+- `creds.example.json` — structure of `creds/<name>.json` (secrets, in `.gitignore`)
+- `config.example.json` — structure of `config.json` (active profile)
+- `batch.example.json` — sample input for `jira_batch.py`
 
-## Использование
+## Usage
 
-Эти файлы — ТОЛЬКО шаблоны. Реальные конфиги создаются автоматически через `jira_init.py`. Не нужно их копировать вручную.
+These are templates **only**. Real configs are created automatically via `jira_init.py`. No need to copy them manually.
 
-Для batch:
+For batch operations:
+
 ```bash
 cp examples/batch.example.json /tmp/my-ops.json
-# отредактируй
+# edit the file
 python scripts/jira_batch.py --file /tmp/my-ops.json
 ```
