@@ -1,6 +1,6 @@
 ---
 name: jira
-description: Manage Jira tasks via CLI scripts — create, transition, link, search, worklog, sprints, batch operations. Multi-board (profile) support with switching. Activate when user mentions Jira, issue keys like XYZ-123, `/jira-*` commands, or works with tasks/sprints.
+description: Work with Jira issues, sprints, worklogs and links from Claude Code. Auto-activates when user mentions Jira, issue keys like XYZ-123, or runs /jira-* commands.
 ---
 
 # Jira CLI Skill
